@@ -88,15 +88,14 @@ document.getElementById('rsvpForm').addEventListener('submit', async e => {
   btn.textContent = '...';
 
   const attLabels = { yes: 'Иә, әрине келемін', spouse: 'Жұбыммен келемін', no: 'Өкінішке орай, келе алмаймын' };
-  const params = new URLSearchParams({
-    name,
-    attendance: attEl ? attLabels[attEl.value] : '',
-    guests: guests || '1',
-    timestamp: new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' })
-  });
+  const body = new FormData();
+  body.append('name',       name);
+  body.append('attendance', attEl ? attLabels[attEl.value] : '');
+  body.append('guests',     guests || '1');
+  body.append('timestamp',  new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' }));
 
   try {
-    await fetch(SHEET_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+    await fetch(SHEET_URL, { method: 'POST', body, mode: 'no-cors' });
   } catch (_) {}
 
   form.style.display = 'none';
