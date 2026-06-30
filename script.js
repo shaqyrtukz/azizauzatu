@@ -1,60 +1,60 @@
-// Music autoplay on first interaction
-const audio = document.getElementById('bgMusic');
-const musicBtn = document.getElementById('musicBtn');
-let playing = false;
+// ── Music ──────────────────────────────────────────
+const audio   = document.getElementById('bgMusic');
+const btn     = document.getElementById('musicBtn');
+const iconPlay = document.getElementById('iconPlay');
+const iconMute = document.getElementById('iconMute');
+let playing   = false;
 
 function startMusic() {
+  audio.volume = 0.5;
   audio.play().then(() => {
     playing = true;
-    musicBtn.classList.remove('muted');
+    iconPlay.style.display = 'none';
+    iconMute.style.display = 'block';
   }).catch(() => {});
 }
 
-document.addEventListener('click', function onFirstClick() {
+// Autoplay on first interaction
+document.addEventListener('click', function start() {
   startMusic();
-  document.removeEventListener('click', onFirstClick);
+  document.removeEventListener('click', start);
 }, { once: true });
 
-musicBtn.addEventListener('click', (e) => {
+btn.addEventListener('click', e => {
   e.stopPropagation();
   if (playing) {
     audio.pause();
     playing = false;
-    musicBtn.classList.add('muted');
+    iconPlay.style.display = 'block';
+    iconMute.style.display = 'none';
   } else {
     startMusic();
   }
 });
 
-// Countdown timer — target: 14 August 2026, 17:00 Ekibastuz time (UTC+5)
-const target = new Date('2026-08-14T17:00:00+05:00');
+// ── Scroll-reveal animation ─────────────────────────
+const revealEls = document.querySelectorAll(
+  '.invitation > *, .calendar-section > *, .location-section > *, .rsvp-section > *'
+);
 
-function updateTimer() {
-  const now = new Date();
-  const diff = target - now;
+revealEls.forEach(el => el.classList.add('reveal'));
 
-  if (diff <= 0) {
-    document.getElementById('timer').innerHTML = '<span style="font-size:24px;letter-spacing:3px;">Той басталды! 🎉</span>';
-    return;
-  }
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
 
-  const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+revealEls.forEach(el => observer.observe(el));
 
-  document.getElementById('days').textContent    = String(days).padStart(2, '0');
-  document.getElementById('hours').textContent   = String(hours).padStart(2, '0');
-  document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-  document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-}
-
-updateTimer();
-setInterval(updateTimer, 1000);
-
-// RSVP form
-document.getElementById('rsvpForm').addEventListener('submit', (e) => {
+// ── RSVP form ───────────────────────────────────────
+document.getElementById('rsvpForm').addEventListener('submit', e => {
   e.preventDefault();
   document.getElementById('rsvpForm').style.display = 'none';
-  document.getElementById('rsvpSuccess').style.display = 'block';
+  const thanks = document.getElementById('rsvpThanks');
+  thanks.style.display = 'block';
+  thanks.classList.add('visible');
 });
