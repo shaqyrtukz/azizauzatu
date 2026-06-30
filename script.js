@@ -74,7 +74,7 @@ const observer = new IntersectionObserver(entries => {
 revealEls.forEach(el => observer.observe(el));
 
 // ── RSVP form ───────────────────────────────────────
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwLj-f0QfSZv46AQi-kPPM120_Ecj57PnKmKFQI-K1fvG5TuJwZs6447AE6KYF6v00lAA/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxpQSd3rEEN-Z76ZW7jCfiV98xNUYJQ8T8xRifrHoXYOYr1hvK2cttKRmdG9SOFHqb0PQ/exec';
 
 function submitToSheet(data) {
   // Hidden iframe bypasses CORS and redirect issues with Apps Script
