@@ -553,10 +553,11 @@ body {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 540px) {
-  .hero { grid-template-columns: 44px 1fr; }
-  .ornament-svg { width: 44px; }
+  .hero { grid-template-columns: 48px 1fr; }
+  /* Centre the 64px pattern in the 48px strip: shift left 8px so we see x=8..56 */
+  .ornament-svg { left: -8px; width: 64px; }
   .hero-scroll {
-    left: calc(44px + 50%);
+    left: calc(48px + 50%);
   }
   .hero-name { font-size: 64px; }
   .hero-event { letter-spacing: 4px; font-size: 15px; }
