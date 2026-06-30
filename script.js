@@ -4,21 +4,12 @@ const btn      = document.getElementById('musicBtn');
 const iconPlay = document.getElementById('iconPlay');
 const iconMute = document.getElementById('iconMute');
 
-const apBtn       = document.getElementById('audioPlayBtn');
-const apIconPlay  = document.getElementById('apIconPlay');
-const apIconPause = document.getElementById('apIconPause');
-const progFill    = document.getElementById('audioProgressFill');
-
 let playing = false;
 
 function setPlayState(isPlaying) {
   playing = isPlaying;
-  // Floating button
   iconPlay.style.display = isPlaying ? 'none'  : 'block';
   iconMute.style.display = isPlaying ? 'block' : 'none';
-  // Widget button
-  apIconPlay.style.display  = isPlaying ? 'none'  : 'block';
-  apIconPause.style.display = isPlaying ? 'block' : 'none';
 }
 
 function startMusic() {
@@ -31,21 +22,13 @@ function toggleMusic() {
   else          { startMusic(); }
 }
 
-// Progress bar update
-audio.addEventListener('timeupdate', () => {
-  if (audio.duration) {
-    progFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
-  }
-});
-
 // Autoplay on first interaction
 document.addEventListener('click', function start() {
   startMusic();
   document.removeEventListener('click', start);
 }, { once: true });
 
-btn.addEventListener('click',  e => { e.stopPropagation(); toggleMusic(); });
-apBtn.addEventListener('click', e => { e.stopPropagation(); toggleMusic(); });
+btn.addEventListener('click', e => { e.stopPropagation(); toggleMusic(); });
 
 // ── Countdown Timer ─────────────────────────────────
 const eventDate = new Date('2026-08-14T17:00:00+05:00'); // Kazakhstan time UTC+5
@@ -91,9 +74,32 @@ const observer = new IntersectionObserver(entries => {
 revealEls.forEach(el => observer.observe(el));
 
 // ── RSVP form ───────────────────────────────────────
-document.getElementById('rsvpForm').addEventListener('submit', e => {
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwLj-f0QfSZv46AQi-kPPM120_Ecj57PnKmKFQI-K1fvG5TuJwZs6447AE6KYF6v00lAA/exec';
+
+document.getElementById('rsvpForm').addEventListener('submit', async e => {
   e.preventDefault();
-  document.getElementById('rsvpForm').style.display = 'none';
+  const form   = e.target;
+  const btn    = form.querySelector('.rsvp-btn');
+  const name   = form.querySelector('input[type="text"]').value.trim();
+  const attEl  = form.querySelector('input[name="att"]:checked');
+  const guests = form.querySelector('.rsvp-input-guests').value;
+
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  const attLabels = { yes: 'Иә, әрине келемін', spouse: 'Жұбыммен келемін', no: 'Өкінішке орай, келе алмаймын' };
+  const params = new URLSearchParams({
+    name,
+    attendance: attEl ? attLabels[attEl.value] : '',
+    guests: guests || '1',
+    timestamp: new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' })
+  });
+
+  try {
+    await fetch(SHEET_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+  } catch (_) {}
+
+  form.style.display = 'none';
   const thanks = document.getElementById('rsvpThanks');
   thanks.style.display = 'block';
   thanks.classList.add('visible');

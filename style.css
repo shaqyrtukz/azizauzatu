@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'KZ Rosa Marena';
+  src: url('assets/fonts/KZ Rosa Marena.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -12,7 +20,7 @@
 html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Lora', Georgia, serif;
   background: var(--rose);
   color: var(--text-on-rose);
   overflow-x: hidden;
@@ -69,7 +77,7 @@ body {
 }
 
 .hero-name {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(72px, 11vw, 130px);
   font-weight: 400;
   color: var(--cream);
@@ -84,7 +92,7 @@ body {
 }
 
 .hero-event {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(16px, 3vw, 26px);
   font-weight: 300;
   letter-spacing: 7px;
@@ -135,7 +143,7 @@ body {
 .inv-ornament-top, .inv-ornament-bottom { opacity: .8; }
 
 .inv-title {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(34px, 6vw, 52px);
   font-weight: 400;
   color: var(--brown);
@@ -160,7 +168,7 @@ body {
 }
 
 .inv-name-script {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(40px, 7vw, 60px);
   font-weight: 400;
   color: var(--brown);
@@ -179,7 +187,7 @@ body {
 }
 
 .cal-title {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(30px, 5vw, 44px);
   font-weight: 400;
   color: var(--cream);
@@ -208,7 +216,7 @@ body {
 }
 
 .cal-month {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(38px, 6vw, 52px);
   font-weight: 400;
   color: var(--cream);
@@ -261,7 +269,7 @@ body {
 }
 
 .cal-time-label {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(28px, 4.5vw, 40px);
   font-weight: 400;
   color: var(--cream);
@@ -269,7 +277,7 @@ body {
 }
 
 .cal-time {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(44px, 8vw, 72px);
   font-weight: 300;
   letter-spacing: 6px;
@@ -291,7 +299,7 @@ body {
 .yurt-icon { opacity: .85; flex-shrink: 0; }
 
 .loc-title {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(30px, 5vw, 44px);
   font-weight: 400;
   color: var(--cream);
@@ -332,7 +340,7 @@ body {
   color: var(--cream);
   border-radius: 50px;
   text-decoration: none;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(14px, 2vw, 16px);
   letter-spacing: 2px;
   transition: background .3s, transform .2s;
@@ -342,14 +350,14 @@ body {
 .loc-divider { margin: 8px 0; opacity: .8; }
 
 .loc-hosts-label {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(26px, 4.5vw, 38px);
   font-weight: 400;
   color: var(--cream);
 }
 
 .loc-hosts {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(20px, 3.5vw, 28px);
   font-weight: 300;
   letter-spacing: 3px;
@@ -382,7 +390,7 @@ body {
 .rsvp-section > * { position: relative; z-index: 1; }
 
 .rsvp-title {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'KZ Rosa Marena', cursive;
   font-size: clamp(34px, 6vw, 50px);
   font-weight: 400;
   color: var(--brown);
@@ -408,7 +416,7 @@ body {
   background: transparent;
   border: 1px solid rgba(98,51,27,.35);
   color: var(--brown);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: 16px;
   letter-spacing: .5px;
   outline: none;
@@ -417,6 +425,14 @@ body {
 .rsvp-input::placeholder { color: rgba(98,51,27,.45); }
 .rsvp-input:focus { border-color: var(--brown); }
 
+.rsvp-question {
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  color: var(--brown);
+  margin-bottom: 4px;
+  text-align: left;
+}
+.rsvp-input-guests { margin-top: 4px; }
 .rsvp-radios { display: flex; flex-direction: column; gap: 12px; }
 
 .rsvp-radio {
@@ -438,7 +454,7 @@ body {
   color: var(--cream);
   border: none;
   border-radius: 50px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: 15px;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -456,64 +472,40 @@ body {
   line-height: 1.6;
 }
 
-/* ─── AUDIO PLAYER WIDGET ─── */
-.audio-player-widget {
-  background: #111;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 28px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  border-radius: 0;
-}
-.audio-play-btn {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.3);
-  background: transparent;
-  color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: border-color .3s;
-}
-.audio-play-btn:hover { border-color: rgba(255,255,255,0.7); }
-.audio-track-info { flex: 1; }
-.audio-track-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.audio-progress-bar {
-  height: 2px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.audio-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: rgba(250,241,225,0.7);
-  transition: width 1s linear;
-}
-.audio-volume { flex-shrink: 0; color: #fff; }
 
-/* ─── COUNTDOWN SECTION ─── */
-.countdown-section {
-  background: #111;
-  padding: 48px 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ─── CLOSING + COUNTDOWN SECTION ─── */
+.closing-section {
+  background: var(--rose);
+  padding: 72px 24px 80px;
+  text-align: center;
+  color: var(--cream);
+}
+.closing-motto {
+  font-family: 'KZ Rosa Marena', cursive;
+  font-size: clamp(26px, 6vw, 42px);
+  color: var(--cream);
+  line-height: 1.35;
+  margin-bottom: 36px;
+}
+.closing-ornament { margin-bottom: 32px; }
+.cd-title-label {
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(250,241,225,0.7);
+  margin-bottom: 18px;
+}
+.cd-kaldy {
+  font-family: 'KZ Rosa Marena', cursive;
+  font-size: clamp(22px, 4vw, 30px);
+  color: var(--cream);
+  margin-top: 10px;
 }
 .cd-grid {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 .cd-unit {
@@ -521,9 +513,10 @@ body {
   flex-direction: column;
   align-items: center;
   min-width: 72px;
+  text-align: center;
 }
 .cd-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(44px, 9vw, 72px);
   font-weight: 300;
   color: var(--cream);
@@ -531,7 +524,7 @@ body {
   letter-spacing: 2px;
 }
 .cd-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(11px, 1.8vw, 14px);
   font-weight: 300;
   color: rgba(250,241,225,0.65);
@@ -539,7 +532,7 @@ body {
   margin-top: 6px;
 }
 .cd-sep {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Lora', serif;
   font-size: clamp(36px, 7vw, 60px);
   font-weight: 300;
   color: rgba(250,241,225,0.4);
