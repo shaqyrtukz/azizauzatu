@@ -1,18 +1,42 @@
 // ── Music ──────────────────────────────────────────
-const audio   = document.getElementById('bgMusic');
-const btn     = document.getElementById('musicBtn');
+const audio    = document.getElementById('bgMusic');
+const btn      = document.getElementById('musicBtn');
 const iconPlay = document.getElementById('iconPlay');
 const iconMute = document.getElementById('iconMute');
-let playing   = false;
+
+const apBtn       = document.getElementById('audioPlayBtn');
+const apIconPlay  = document.getElementById('apIconPlay');
+const apIconPause = document.getElementById('apIconPause');
+const progFill    = document.getElementById('audioProgressFill');
+
+let playing = false;
+
+function setPlayState(isPlaying) {
+  playing = isPlaying;
+  // Floating button
+  iconPlay.style.display = isPlaying ? 'none'  : 'block';
+  iconMute.style.display = isPlaying ? 'block' : 'none';
+  // Widget button
+  apIconPlay.style.display  = isPlaying ? 'none'  : 'block';
+  apIconPause.style.display = isPlaying ? 'block' : 'none';
+}
 
 function startMusic() {
   audio.volume = 0.5;
-  audio.play().then(() => {
-    playing = true;
-    iconPlay.style.display = 'none';
-    iconMute.style.display = 'block';
-  }).catch(() => {});
+  audio.play().then(() => setPlayState(true)).catch(() => {});
 }
+
+function toggleMusic() {
+  if (playing) { audio.pause(); setPlayState(false); }
+  else          { startMusic(); }
+}
+
+// Progress bar update
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    progFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+  }
+});
 
 // Autoplay on first interaction
 document.addEventListener('click', function start() {
@@ -20,17 +44,33 @@ document.addEventListener('click', function start() {
   document.removeEventListener('click', start);
 }, { once: true });
 
-btn.addEventListener('click', e => {
-  e.stopPropagation();
-  if (playing) {
-    audio.pause();
-    playing = false;
-    iconPlay.style.display = 'block';
-    iconMute.style.display = 'none';
-  } else {
-    startMusic();
+btn.addEventListener('click',  e => { e.stopPropagation(); toggleMusic(); });
+apBtn.addEventListener('click', e => { e.stopPropagation(); toggleMusic(); });
+
+// ── Countdown Timer ─────────────────────────────────
+const eventDate = new Date('2026-08-14T17:00:00+05:00'); // Kazakhstan time UTC+5
+
+function updateCountdown() {
+  const now  = new Date();
+  const diff = eventDate - now;
+  if (diff <= 0) {
+    document.getElementById('cdDays').textContent  = '00';
+    document.getElementById('cdHours').textContent = '00';
+    document.getElementById('cdMins').textContent  = '00';
+    document.getElementById('cdSecs').textContent  = '00';
+    return;
   }
-});
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cdDays').textContent  = String(d).padStart(2,'0');
+  document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cdMins').textContent  = String(m).padStart(2,'0');
+  document.getElementById('cdSecs').textContent  = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
 
 // ── Scroll-reveal animation ─────────────────────────
 const revealEls = document.querySelectorAll(
