@@ -76,7 +76,35 @@ revealEls.forEach(el => observer.observe(el));
 // ── RSVP form ───────────────────────────────────────
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwLj-f0QfSZv46AQi-kPPM120_Ecj57PnKmKFQI-K1fvG5TuJwZs6447AE6KYF6v00lAA/exec';
 
-document.getElementById('rsvpForm').addEventListener('submit', async e => {
+function submitToSheet(data) {
+  // Hidden iframe bypasses CORS and redirect issues with Apps Script
+  const iframeName = 'rsvp_frame_' + Date.now();
+  const iframe = document.createElement('iframe');
+  iframe.name = iframeName;
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  const form = document.createElement('form');
+  form.action = SHEET_URL;
+  form.method = 'POST';
+  form.target = iframeName;
+
+  Object.entries(data).forEach(([k, v]) => {
+    const inp = document.createElement('input');
+    inp.type = 'hidden';
+    inp.name = k;
+    inp.value = v;
+    form.appendChild(inp);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(() => {
+    try { document.body.removeChild(form); document.body.removeChild(iframe); } catch (_) {}
+  }, 5000);
+}
+
+document.getElementById('rsvpForm').addEventListener('submit', e => {
   e.preventDefault();
   const form   = e.target;
   const btn    = form.querySelector('.rsvp-btn');
@@ -88,15 +116,13 @@ document.getElementById('rsvpForm').addEventListener('submit', async e => {
   btn.textContent = '...';
 
   const attLabels = { yes: 'Иә, әрине келемін', spouse: 'Жұбыммен келемін', no: 'Өкінішке орай, келе алмаймын' };
-  const body = new FormData();
-  body.append('name',       name);
-  body.append('attendance', attEl ? attLabels[attEl.value] : '');
-  body.append('guests',     guests || '1');
-  body.append('timestamp',  new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' }));
 
-  try {
-    await fetch(SHEET_URL, { method: 'POST', body, mode: 'no-cors' });
-  } catch (_) {}
+  submitToSheet({
+    name,
+    attendance: attEl ? attLabels[attEl.value] : '',
+    guests:     guests || '1',
+    timestamp:  new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' })
+  });
 
   form.style.display = 'none';
   const thanks = document.getElementById('rsvpThanks');
