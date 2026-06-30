@@ -44,7 +44,7 @@ body {
   min-height: 100vh;
   background: var(--rose);
   display: grid;
-  grid-template-columns: 44px 1fr;
+  grid-template-columns: 56px 1fr;
   overflow: hidden;
 }
 
@@ -55,12 +55,12 @@ body {
 }
 .ornament-svg {
   position: absolute;
-  top: 0; left: -10px;
+  top: 0; left: -4px;
   width: 64px;
   height: 100%;
 }
-/* Subtle white overlay on rose background */
-.ornament-strip path { fill: rgba(255,255,255,0.2); }
+/* Visible brown ornament on rose background */
+.ornament-strip path { fill: rgba(98,51,27,0.38); }
 
 .hero-content {
   display: flex;
@@ -110,7 +110,7 @@ body {
 .hero-scroll {
   position: absolute;
   bottom: 36px;
-  left: calc(44px + 50%);
+  left: calc(56px + 50%);
   transform: translateX(-50%);
   color: rgba(250,241,225,.75);
   text-decoration: none;
@@ -564,9 +564,9 @@ body {
 
 @media (max-width: 540px) {
   /* Hero */
-  .hero { grid-template-columns: 36px 1fr; }
-  .ornament-svg { left: -14px; width: 64px; }
-  .hero-scroll { left: calc(36px + 50%); }
+  .hero { grid-template-columns: 48px 1fr; }
+  .ornament-svg { left: -8px; width: 64px; }
+  .hero-scroll { left: calc(48px + 50%); }
   .hero-name { font-size: clamp(52px, 14vw, 72px); }
   .hero-event { letter-spacing: 4px; font-size: 14px; }
   .hero-content { padding: 60px 20px 120px; gap: 8px; }
