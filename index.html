@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Азиза — Қыз Ұзату</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background music (autoplay with user interaction) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="assets/audio/music.m4a" type="audio/mp4">
+  </audio>
+
+  <!-- Music toggle button -->
+  <button class="music-btn" id="musicBtn" title="Музыка">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path id="musicIcon" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </svg>
+  </button>
+
+  <!-- ===== SECTION 1: HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="ornament-left">
+      <img src="assets/images/ornament.jpg" alt="Ornament">
+    </div>
+
+    <div class="hero-content">
+      <h1 class="name">Азиза</h1>
+      <div class="thin-divider"></div>
+      <h2 class="event-type">ҚЫЗ ҰЗАТУ</h2>
+      <div class="hero-details">
+        <p class="date">14 ТАМЫЗ, 2026 &nbsp;|&nbsp; 17:00</p>
+        <p class="venue">&laquo;ЕЛ ТАУ&raquo; МЕЙРАМХАНАСЫ</p>
+      </div>
+    </div>
+
+    <a href="#invitation" class="scroll-btn" aria-label="Төмен">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="8 12 12 16 16 12"/>
+        <line x1="12" y1="8" x2="12" y2="16"/>
+      </svg>
+    </a>
+
+    <div class="hero-actions">
+      <a href="#map" class="hero-btn">Картаны ашу</a>
+      <a href="#rsvp" class="hero-btn">Сауалнама</a>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: INVITATION ===== -->
+  <section class="invitation" id="invitation">
+    <div class="invitation-inner">
+      <div class="ornament-diamond">❖</div>
+      <p class="invitation-text">
+        Тойымыздың қадірлі<br>қонағы болыңыздар!
+      </p>
+      <div class="ornament-diamond">❖</div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: COUNTDOWN ===== -->
+  <section class="countdown-section" id="countdown">
+    <p class="countdown-label-top">Тойға дейін</p>
+    <div class="countdown-timer" id="timer">
+      <div class="time-block"><span id="days">00</span><small>күн</small></div>
+      <div class="time-sep">:</div>
+      <div class="time-block"><span id="hours">00</span><small>сағат</small></div>
+      <div class="time-sep">:</div>
+      <div class="time-block"><span id="minutes">00</span><small>минут</small></div>
+      <div class="time-sep">:</div>
+      <div class="time-block"><span id="seconds">00</span><small>секунд</small></div>
+    </div>
+    <p class="countdown-label-bottom">қалды</p>
+  </section>
+
+  <!-- ===== SECTION 4: MAP ===== -->
+  <section class="map-section" id="map">
+    <div class="section-header">
+      <h3>Картаны ашу</h3>
+      <p>жетуге ыңғайлы болу үшін<br>төмендегі картаны қолданыңыз:</p>
+    </div>
+    <div class="map-container">
+      <iframe
+        src="https://www.openstreetmap.org/export/embed.html?bbox=75.321%2C51.726%2C75.341%2C51.746&layer=mapnik&marker=51.736209%2C75.331231"
+        width="100%" height="400" frameborder="0"
+        style="border:0;border-radius:12px;"
+        allowfullscreen loading="lazy"></iframe>
+    </div>
+    <a href="https://2gis.kz/ekibastuz/geo/70030076805811358/75.331231,51.736209" target="_blank" class="map-link-btn">
+      2GIS картасында ашу
+    </a>
+  </section>
+
+  <!-- ===== SECTION 5: RSVP ===== -->
+  <section class="rsvp-section" id="rsvp">
+    <div class="section-header">
+      <h3>Сауалнама</h3>
+      <p>Төмендегі сауалнаманы<br>толтырып, тойға қатысуыңызды<br>растауыңызды сұраймыз:</p>
+    </div>
+    <form class="rsvp-form" id="rsvpForm">
+      <div class="form-group">
+        <input type="text" id="guestName" placeholder="Аты-жөніңіз" required>
+      </div>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="attendance" value="yes" required>
+          <span>Қатысамын</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="attendance" value="no">
+          <span>Кешіріңіздер, қатыса алмаймын</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="attendance" value="maybe">
+          <span>Белгісіз</span>
+        </label>
+      </div>
+      <button type="submit" class="submit-btn">Жіберу</button>
+    </form>
+    <div class="rsvp-success" id="rsvpSuccess" style="display:none;">
+      <p>Рахмет! Сіздің жауабыңыз қабылданды. 🌸</p>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="ornament-diamond">❖</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
