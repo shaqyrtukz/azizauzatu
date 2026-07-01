@@ -1,131 +1,110 @@
-// ── Music ──────────────────────────────────────────
-const audio    = document.getElementById('bgMusic');
-const btn      = document.getElementById('musicBtn');
-const iconPlay = document.getElementById('iconPlay');
-const iconMute = document.getElementById('iconMute');
-
-let playing = false;
-
-function setPlayState(isPlaying) {
-  playing = isPlaying;
-  iconPlay.style.display = isPlaying ? 'none'  : 'block';
-  iconMute.style.display = isPlaying ? 'block' : 'none';
-}
-
-function startMusic() {
-  audio.volume = 0.5;
-  audio.play().then(() => setPlayState(true)).catch(() => {});
-}
-
-function toggleMusic() {
-  if (playing) { audio.pause(); setPlayState(false); }
-  else          { startMusic(); }
-}
-
-// Autoplay on first interaction
-document.addEventListener('click', function start() {
-  startMusic();
-  document.removeEventListener('click', start);
-}, { once: true });
-
-btn.addEventListener('click', e => { e.stopPropagation(); toggleMusic(); });
-
-// ── Countdown Timer ─────────────────────────────────
-const eventDate = new Date('2026-08-14T17:00:00+05:00'); // Kazakhstan time UTC+5
-
-function updateCountdown() {
-  const now  = new Date();
-  const diff = eventDate - now;
-  if (diff <= 0) {
-    document.getElementById('cdDays').textContent  = '00';
-    document.getElementById('cdHours').textContent = '00';
-    document.getElementById('cdMins').textContent  = '00';
-    document.getElementById('cdSecs').textContent  = '00';
-    return;
+// ---------- Build the September 2026 calendar, ring day 05 ----------
+(function calendar() {
+  const box = document.getElementById('calendar-days');
+  if (!box) return;
+  const EVENT_DAY = 5;
+  // Mon-first grid. Sep 1, 2026 is a Tuesday → one empty cell before the 1st.
+  const firstWeekdayMon = (new Date(2026, 8, 1).getDay() + 6) % 7; // 1 (Tue)
+  const daysInMonth = 30;
+  let html = '';
+  for (let i = 0; i < firstWeekdayMon; i++) html += '<span></span>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    html += `<span class="${d === EVENT_DAY ? 'is-day' : ''}">${d < 10 ? '0' + d : d}</span>`;
   }
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  document.getElementById('cdDays').textContent  = String(d).padStart(2,'0');
-  document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
-  document.getElementById('cdMins').textContent  = String(m).padStart(2,'0');
-  document.getElementById('cdSecs').textContent  = String(s).padStart(2,'0');
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
+  box.innerHTML = html;
+})();
 
-// ── Scroll-reveal animation ─────────────────────────
-const revealEls = document.querySelectorAll(
-  '.invitation > *, .calendar-section > *, .location-section > *, .rsvp-section > *'
-);
+// ---------- Countdown to the toi (Astana, UTC+5) ----------
+(function countdown() {
+  const target = new Date('2026-09-05T15:00:00+05:00').getTime();
+  const els = {
+    days: document.getElementById('t-days'),
+    hours: document.getElementById('t-hours'),
+    min: document.getElementById('t-min'),
+    sec: document.getElementById('t-sec'),
+  };
+  const pad = (n) => String(n).padStart(2, '0');
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) { Object.values(els).forEach((e) => e.textContent = '00'); return; }
+    els.days.textContent  = pad(Math.floor(diff / 86400000));
+    els.hours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+    els.min.textContent   = pad(Math.floor((diff % 3600000) / 60000));
+    els.sec.textContent   = pad(Math.floor((diff % 60000) / 1000));
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
-revealEls.forEach(el => el.classList.add('reveal'));
+// ---------- Fade-in blocks on scroll ----------
+(function scrollReveal() {
+  const blocks = document.querySelectorAll('.block[data-anim]');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  blocks.forEach((b) => io.observe(b));
+})();
 
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+// ---------- Scroll-down button ----------
+(function scrollButton() {
+  document.querySelectorAll('[data-scroll]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const t = document.querySelector(btn.getAttribute('data-scroll'));
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+})();
+
+// ---------- Music toggle ----------
+(function music() {
+  const audio = document.getElementById('bg-music');
+  const btn = document.getElementById('music-toggle');
+  const note = btn.querySelector('.icon-note');
+  const pause = btn.querySelector('.icon-pause');
+  btn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().catch(() => {});
+      btn.classList.add('playing');
+      note.style.display = 'none'; pause.style.display = '';
+    } else {
+      audio.pause();
+      btn.classList.remove('playing');
+      note.style.display = ''; pause.style.display = 'none';
     }
   });
-}, { threshold: 0.12 });
+})();
 
-revealEls.forEach(el => observer.observe(el));
+// ---------- RSVP → Google Sheets (Apps Script Web App) ----------
+(function rsvp() {
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxkt_VtglZi3mdjNTstJbfmAAm4CfPSj4NPBJSKoMvqj62zUjtJWNneK0D5Mcf_4smf/exec';
+  const form = document.getElementById('rsvp-form');
+  const thanks = document.getElementById('rsvp-thanks');
+  const submitBtn = form.querySelector('.btn-submit');
 
-// ── RSVP form ───────────────────────────────────────
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxeVZ7NqiODVjItZwvxwOiTBZA8ClI5F9banMPLPKInWUxdOHWb9rxDhicVqPKyUJ7_AA/exec';
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const entry = {
+      name: data.get('name') || '',
+      status: data.get('status') || '',
+      guests: data.get('guests') || '',
+      submittedAt: new Date().toISOString(),
+    };
+    // Local backup in case the network request fails.
+    try {
+      const stored = JSON.parse(localStorage.getItem('rsvp_aziza') || '[]');
+      stored.push(entry);
+      localStorage.setItem('rsvp_aziza', JSON.stringify(stored));
+    } catch (err) { /* ignore */ }
 
-function submitToSheet(data) {
-  // Hidden iframe bypasses CORS and redirect issues with Apps Script
-  const iframeName = 'rsvp_frame_' + Date.now();
-  const iframe = document.createElement('iframe');
-  iframe.name = iframeName;
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Жіберілуде...';
 
-  const form = document.createElement('form');
-  form.action = SHEET_URL;
-  form.method = 'POST';
-  form.target = iframeName;
-
-  Object.entries(data).forEach(([k, v]) => {
-    const inp = document.createElement('input');
-    inp.type = 'hidden';
-    inp.name = k;
-    inp.value = v;
-    form.appendChild(inp);
+    // no-cors: Apps Script accepts the POST but the response is opaque,
+    // so we show the thank-you optimistically.
+    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(entry) })
+      .finally(() => { form.hidden = true; thanks.hidden = false; });
   });
-
-  document.body.appendChild(form);
-  form.submit();
-  setTimeout(() => {
-    try { document.body.removeChild(form); document.body.removeChild(iframe); } catch (_) {}
-  }, 5000);
-}
-
-document.getElementById('rsvpForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const form   = e.target;
-  const btn    = form.querySelector('.rsvp-btn');
-  const name   = form.querySelector('input[type="text"]').value.trim();
-  const attEl  = form.querySelector('input[name="att"]:checked');
-  const guests = form.querySelector('.rsvp-input-guests').value;
-
-  btn.disabled = true;
-  btn.textContent = '...';
-
-  const attLabels = { yes: 'Иә, әрине келемін', spouse: 'Жұбыммен келемін', no: 'Өкінішке орай, келе алмаймын' };
-
-  submitToSheet({
-    name,
-    attendance: attEl ? attLabels[attEl.value] : '',
-    guests:     guests || '1',
-    timestamp:  new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' })
-  });
-
-  form.style.display = 'none';
-  const thanks = document.getElementById('rsvpThanks');
-  thanks.style.display = 'block';
-  thanks.classList.add('visible');
-});
+})();
